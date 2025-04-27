@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Enable the following rules to enforce best practices
+    # https://dart.dev/tools/linter
+    # https://dart.dev/tools/linter#lints
+    avoid_print: false  # Uncomment to disable the `avoid_print` rule
+    avoid_unnecessary_containers: false
+    prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    prefer_const_constructors: true
+    prefer_relative_imports: true
+# Enable the following rules to enforce best practices    
