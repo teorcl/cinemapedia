@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../providers/providers.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
@@ -6,15 +9,41 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _HomeView();
+    return const Scaffold(body: _HomeView());
   }
 }
 
-class _HomeView extends StatelessWidget {
+class _HomeView extends ConsumerStatefulWidget {
   const _HomeView();
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends ConsumerState<_HomeView> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Este llamado se hace para que al iniciar la pantalla se carguen los datos, es decir se cambie el estado
+    /// de la lista vacia a una lista con los datos
+    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+
+    return ListView.builder(
+      itemCount: nowPlayingMovies.length,
+      itemBuilder: (context, index) {
+        final movie = nowPlayingMovies[index];
+        return ListTile(
+          title: Text(movie.title),
+          subtitle: Text(movie.overview),
+          // leading: Image.network(movie.posterPath),
+        );
+      },
+    );
   }
 }
