@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/providers.dart';
+import '../../widgets/shared/custom_appbar.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
@@ -34,16 +35,23 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
 
-    return ListView.builder(
-      itemCount: nowPlayingMovies.length,
-      itemBuilder: (context, index) {
-        final movie = nowPlayingMovies[index];
-        return ListTile(
-          title: Text(movie.title),
-          subtitle: Text(movie.overview),
-          // leading: Image.network(movie.posterPath),
-        );
-      },
+    return Column(
+      children: [
+        const CustomAppbar(),
+        Expanded(
+          child: ListView.builder(
+            itemCount: nowPlayingMovies.length,
+            itemBuilder: (context, index) {
+              final movie = nowPlayingMovies[index];
+              return ListTile(
+                title: Text(movie.title),
+                subtitle: Text(movie.overview),
+                // leading: Image.network(movie.posterPath),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
