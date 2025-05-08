@@ -23,7 +23,7 @@ class MoviedbDatasource implements MoviesDatasource {
   Future<List<Movie>> getNowPlaying({int page = 1}) async {
     final response = await dio.get(
       '/movie/now_playing',
-      //queryParameters: {'page': page},
+      queryParameters: {'page': page},
     );
 
     /// convierte la response a un DTO de la capa de infraestructura

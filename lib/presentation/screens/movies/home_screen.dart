@@ -43,7 +43,20 @@ class _HomeViewState extends ConsumerState<_HomeView> {
       children: [
         const CustomAppbar(),
 
+        ///Widget customizado para mostrar el Slideshow de las peliculas
         MoviesSlideshow(movies: moviesSlideshow),
+
+        /// Widget customizado para mostrar la lista horizontal de peliculas
+        MovieHorizontalListview(
+          movies: nowPlayingMovies,
+          title: 'En cines',
+          subtitle: 'Lunes 12',
+          loadNextPage: () {
+            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+          },
+          //loadNextPage: ref.read(nowPlayingMoviesProvider.notifier).loadNextPage, usar las que mas se entienda
+          //loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(), usar las que mas se entienda
+        ),
       ],
     );
   }
