@@ -39,23 +39,71 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideshow = ref.watch(moviesSlideshowPrivder);
 
-    return Column(
-      children: [
-        const CustomAppbar(),
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(title: CustomAppbar()),
+        ),
 
-        ///Widget customizado para mostrar el Slideshow de las peliculas
-        MoviesSlideshow(movies: moviesSlideshow),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                //const CustomAppbar(),
 
-        /// Widget customizado para mostrar la lista horizontal de peliculas
-        MovieHorizontalListview(
-          movies: nowPlayingMovies,
-          title: 'En cines',
-          subtitle: 'Lunes 12',
-          loadNextPage: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
-          //loadNextPage: ref.read(nowPlayingMoviesProvider.notifier).loadNextPage, usar las que mas se entienda
-          //loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(), usar las que mas se entienda
+                ///Widget customizado para mostrar el Slideshow de las peliculas
+                MoviesSlideshow(movies: moviesSlideshow),
+
+                /// Widget customizado para mostrar la lista horizontal de peliculas
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'En cines',
+                  subtitle: 'Lunes 12',
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                  //loadNextPage: ref.read(nowPlayingMoviesProvider.notifier).loadNextPage, usar las que mas se entienda
+                  //loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(), usar las que mas se entienda
+                ),
+
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'Próximamente',
+                  subtitle: 'En este mes',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(nowPlayingMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
+
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'Populares',
+                  // subTitle: '',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(nowPlayingMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
+
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'Mejor calificadas',
+                  subtitle: 'Desde siempre',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(nowPlayingMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
+
+                const SizedBox(height: 10),
+              ],
+            );
+          }, childCount: 1),
         ),
       ],
     );
