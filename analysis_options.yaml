@@ -14,4 +14,5 @@ linter:
     prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
     prefer_const_constructors: true
     prefer_relative_imports: true
+    require_trailing_commas: true
 # Enable the following rules to enforce best practices    
