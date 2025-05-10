@@ -61,7 +61,9 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
       child: Column(
         children: [
           if (widget.title != null || widget.subtitle != null)
-            _Title(title: widget.title, subtitle: widget.subtitle),
+            FadeInRight(
+              child: _Title(title: widget.title, subtitle: widget.subtitle),
+            ),
 
           Expanded(
             child: ListView.builder(

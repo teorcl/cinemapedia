@@ -39,6 +39,10 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(initialLoadingProvider);
+
+    if (isLoading) return const FullScreenLoader();
+
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideshow = ref.watch(moviesSlideshowPrivder);
     final popularMovies = ref.watch(popularMoviesProvider);
@@ -53,67 +57,63 @@ class _HomeViewState extends ConsumerState<_HomeView> {
         ),
 
         SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                //const CustomAppbar(),
 
-              return Column(
-                children: [
-                  //const CustomAppbar(),
+                ///Widget customizado para mostrar el Slideshow de las peliculas
+                MoviesSlideshow(movies: moviesSlideshow),
 
-                  ///Widget customizado para mostrar el Slideshow de las peliculas
-                  MoviesSlideshow(movies: moviesSlideshow),
+                /// Widget customizado para mostrar la lista horizontal de peliculas
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'En cines',
+                  subtitle: 'Lunes 12',
+                  loadNextPage: () {
+                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                  },
+                  //loadNextPage: ref.read(nowPlayingMoviesProvider.notifier).loadNextPage, usar las que mas se entienda
+                  //loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(), usar las que mas se entienda
+                ),
 
-                  /// Widget customizado para mostrar la lista horizontal de peliculas
-                  MovieHorizontalListview(
-                    movies: nowPlayingMovies,
-                    title: 'En cines',
-                    subtitle: 'Lunes 12',
-                    loadNextPage: () {
-                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-                    },
-                    //loadNextPage: ref.read(nowPlayingMoviesProvider.notifier).loadNextPage, usar las que mas se entienda
-                    //loadNextPage: () => ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(), usar las que mas se entienda
-                  ),
+                MovieHorizontalListview(
+                  movies: upcomingMovies,
+                  title: 'Próximamente',
+                  subtitle: 'En este mes',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(upcomingMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
 
-                  MovieHorizontalListview(
-                    movies: upcomingMovies,
-                    title: 'Próximamente',
-                    subtitle: 'En este mes',
-                    loadNextPage:
-                        () =>
-                            ref
-                                .read(upcomingMoviesProvider.notifier)
-                                .loadNextPage(),
-                  ),
+                MovieHorizontalListview(
+                  movies: popularMovies,
+                  title: 'Populares',
+                  // subTitle: '',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(popularMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
 
-                  MovieHorizontalListview(
-                    movies: popularMovies,
-                    title: 'Populares',
-                    // subTitle: '',
-                    loadNextPage:
-                        () =>
-                            ref
-                                .read(popularMoviesProvider.notifier)
-                                .loadNextPage(),
-                  ),
+                MovieHorizontalListview(
+                  movies: topRatedMovies,
+                  title: 'Mejor calificadas',
+                  subtitle: 'Desde siempre',
+                  loadNextPage:
+                      () =>
+                          ref
+                              .read(topRatedMoviesProvider.notifier)
+                              .loadNextPage(),
+                ),
 
-                  MovieHorizontalListview(
-                    movies: topRatedMovies,
-                    title: 'Mejor calificadas',
-                    subtitle: 'Desde siempre',
-                    loadNextPage:
-                        () =>
-                            ref
-                                .read(topRatedMoviesProvider.notifier)
-                                .loadNextPage(),
-                  ),
-
-                  const SizedBox(height: 10),
-                ],
-              );
-            }, 
-            childCount: 1,
-          ),
+                const SizedBox(height: 10),
+              ],
+            );
+          }, childCount: 1),
         ),
       ],
     );
