@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../config/helpers/human_formats.dart';
 import '../../../domain/entities/movie.dart';
@@ -61,9 +62,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
       child: Column(
         children: [
           if (widget.title != null || widget.subtitle != null)
-            FadeInRight(
-              child: _Title(title: widget.title, subtitle: widget.subtitle),
-            ),
+            _Title(title: widget.title, subtitle: widget.subtitle),
 
           Expanded(
             child: ListView.builder(
@@ -74,7 +73,7 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
               itemBuilder: (constext, index) {
                 final movie = widget.movies[index];
 
-                return _Slide(movie: movie);
+                return FadeInRight(child: _Slide(movie: movie));
               },
             ),
           ),
@@ -136,7 +135,12 @@ class _Slide extends StatelessWidget {
                 fit: BoxFit.cover,
                 movie.posterPath,
                 loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return FadeIn(child: child);
+                  if (loadingProgress == null) {
+                    return GestureDetector(
+                      onTap:() => context.push('/movie/${movie.id}'),
+                      child: FadeIn(child: child),
+                    );
+                  }
 
                   return const Padding(
                     padding: EdgeInsets.all(8.0),
