@@ -4,6 +4,7 @@ import '../../config/constants/environment.dart';
 import '../../domain/datasources/movies_datasources.dart';
 import '../../domain/entities/movie.dart';
 import '../mappers/movie_mapper.dart';
+import '../models/moviedb/movie_details.dart';
 import '../models/moviedb/moviedb_response.dart';
 
 /// Esta clase es la implementación de la interfaz MoviesDatasource, de la capa de dominio.
@@ -79,5 +80,20 @@ class MoviedbDatasource implements MoviesDatasource {
 
     final json = response.data;
     return _jsonToMovies(json);
+  }
+  
+  @override
+  Future<Movie> getMovieById(String id) async {
+    final response = await dio.get('/movie/$id');
+
+    if(response.statusCode != 200) {
+      throw Exception('La película no con el id $id, no fue encontrada');
+    }
+
+    final json = response.data;
+    final MovieDetails movieDB = MovieDetails.fromJson(json);
+
+    final Movie movie = MovieMapper.movieDetailsToEntity(movieDB);
+    return movie;
   }
 }
