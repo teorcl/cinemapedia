@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+
 import '../providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/movie.dart';
@@ -31,7 +33,9 @@ class MovieMapNotifier extends StateNotifier<Map<String,Movie>> {
 
   Future<void> loadMovie( String movieId ) async {
     if ( state[movieId] != null ) return;
+    debugPrint('⚡️⚡️⚡️⚡️⚡️⚡️⚡️Arranaca Peticion http⚡️⚡️⚡️⚡️⚡️⚡️⚡️⚡️');
     final movie = await getMovie( movieId );
+    debugPrint('💧💧💧💧💧💧💧💧💧💧Ya finalizo la peticion💧💧💧💧💧💧💧💧💧💧💧');
     state = { ...state, movieId: movie };
   }
 
