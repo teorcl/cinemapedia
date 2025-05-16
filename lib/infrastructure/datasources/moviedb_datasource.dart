@@ -20,18 +20,16 @@ class MoviedbDatasource implements MoviesDatasource {
     ),
   );
 
-  List<Movie> _jsonToMovies( Map<String,dynamic> json ) {
-
+  List<Movie> _jsonToMovies(Map<String, dynamic> json) {
     final movieDBResponse = MovieDbResponse.fromJson(json);
 
-    final List<Movie> movies = movieDBResponse.results
-    .where((moviedb) => moviedb.posterPath != 'no-poster' )
-    .map(
-      (moviedb) => MovieMapper.movieDBToEntity(moviedb),
-    ).toList();
+    final List<Movie> movies =
+        movieDBResponse.results
+            .where((moviedb) => moviedb.posterPath != 'no-poster')
+            .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
+            .toList();
 
     return movies;
-
   }
 
   @override
@@ -59,7 +57,7 @@ class MoviedbDatasource implements MoviesDatasource {
     final json = response.data;
     return _jsonToMovies(json);
   }
-  
+
   @override
   Future<List<Movie>> getUpcomming({int page = 1}) async {
     final response = await dio.get(
@@ -70,7 +68,7 @@ class MoviedbDatasource implements MoviesDatasource {
     final json = response.data;
     return _jsonToMovies(json);
   }
-  
+
   @override
   Future<List<Movie>> getTopRated({int page = 1}) async {
     final response = await dio.get(
@@ -81,12 +79,12 @@ class MoviedbDatasource implements MoviesDatasource {
     final json = response.data;
     return _jsonToMovies(json);
   }
-  
+
   @override
   Future<Movie> getMovieById(String id) async {
     final response = await dio.get('/movie/$id');
 
-    if(response.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('La película no con el id $id, no fue encontrada');
     }
 
@@ -95,5 +93,21 @@ class MoviedbDatasource implements MoviesDatasource {
 
     final Movie movie = MovieMapper.movieDetailsToEntity(movieDB);
     return movie;
+  }
+
+  @override
+  Future<List<Movie>> searchMovies(String query) async {
+    final response = await dio.get(
+      '/search/movie',
+      queryParameters: {
+        'query': query,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('La película $query, no fue encontrada');
+    }
+    final json = response.data;
+    return _jsonToMovies(json);
   }
 }
