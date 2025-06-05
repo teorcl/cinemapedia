@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/entities/movie.dart';
 import '../../providers/providers.dart';
+import '../../widgets/widgets.dart';
 
 class FavoritesView extends ConsumerStatefulWidget {
   const FavoritesView({super.key});
@@ -23,20 +24,6 @@ class _FavoritesViewState extends ConsumerState<FavoritesView> {
     final Map<int, Movie> favoriteMovies = ref.watch(favoriteMoviesProvider);
     final List<Movie> moviesList = favoriteMovies.values.toList();
 
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: moviesList.length,
-        itemBuilder: (context, index) {
-          final Movie movie = moviesList[index];
-
-          return ListTile(
-            title: Text('Favorite Movie ${movie.title}'),
-            onTap: () {
-              // Handle favorite movie tap
-            },
-          );
-        },
-      ),
-    );
+    return Scaffold(body: MovieMasonry(movies: moviesList));
   }
 }
